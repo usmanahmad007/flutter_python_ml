@@ -2,9 +2,25 @@
 
 [![pub package](https://img.shields.io/pub/v/flutter_python_ml.svg)](https://pub.dev/packages/flutter_python_ml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.10-02569B?logo=flutter)](https://flutter.dev)
+[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.3.0-02569B?logo=flutter)](https://flutter.dev)
+[![Platforms](https://img.shields.io/badge/Platforms-Android%20%7C%20iOS%20%7C%20macOS%20%7C%20Windows%20%7C%20Linux%20%7C%20Web-green.svg)](https://pub.dev/packages/flutter_python_ml)
 
-A high-performance, on-device **Machine Learning & Direct Python Bridge** for Flutter. Execute Python files (`.py`) and run ML inference locally on Android, iOS, and Desktop **without external web APIs, cloud servers, or network latency**.
+A high-performance, on-device **Machine Learning & Direct Python Bridge** for Flutter. Execute Python files (`.py`) and run ML inference locally on Android, iOS, Desktop, and Web **without external web APIs, cloud servers, or network latency**.
+
+---
+
+## 📱 Supported Platforms
+
+`flutter_python_ml` is engineered for cross-platform versatility, providing on-device execution across all major platforms:
+
+| Platform | Support | Runtime Driver | Minimum Version |
+| :--- | :---: | :--- | :--- |
+| 🤖 **Android** | ✅ Supported | Native Platform Channel & Embedded Dart Engine | Android 5.0 (API 21+) |
+| 🍎 **iOS** | ✅ Supported | Native Platform Channel & Embedded Dart Engine | iOS 12.0+ |
+| 💻 **macOS** | ✅ Supported | Local Process IPC (`python3`) & Embedded Dart Engine | macOS 10.14+ |
+| 🪟 **Windows** | ✅ Supported | Local Process IPC (`python`) & Embedded Dart Engine | Windows 10+ |
+| 🐧 **Linux** | ✅ Supported | Local Process IPC (`python3`) & Embedded Dart Engine | Any modern distro |
+| 🌐 **Web** | ✅ Supported | Embedded Dart Python Interpreter | All modern browsers |
 
 ---
 
