@@ -32,15 +32,20 @@ class TensorVisualizer extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                title ?? 'Tensor (${tensor.shape.join("×")})',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'monospace',
-                  color: isDark ? Colors.white70 : Colors.black87,
+              Expanded(
+                child: Text(
+                  title ?? 'Tensor (${tensor.shape.join("×")})',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'monospace',
+                    color: isDark ? Colors.white70 : Colors.black87,
+                  ),
                 ),
               ),
+              const SizedBox(width: 8),
               Text(
                 tensor.dtype.name,
                 style: const TextStyle(fontSize: 10, color: Colors.cyanAccent),

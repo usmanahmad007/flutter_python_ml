@@ -209,7 +209,10 @@ class ModelInferenceCard extends StatelessWidget {
 
           // Predicted Class Label or Main Value
           if (pred.predictedLabel != null)
-            Row(
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 8,
+              runSpacing: 4,
               children: [
                 Container(
                   padding:
@@ -227,15 +230,13 @@ class ModelInferenceCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (pred.confidence != null) ...[
-                  const SizedBox(width: 10),
+                if (pred.confidence != null)
                   Text(
                     'Confidence: ${(pred.confidence! * 100).toStringAsFixed(1)}%',
                     style: TextStyle(
                         fontSize: 13,
                         color: isDark ? Colors.white70 : Colors.black87),
                   ),
-                ],
               ],
             ),
 
@@ -255,9 +256,16 @@ class ModelInferenceCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(label,
+                          Expanded(
+                            child: Text(
+                              label,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                  fontSize: 11, color: Colors.grey)),
+                                  fontSize: 11, color: Colors.grey),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
                           Text('${(prob * 100).toStringAsFixed(1)}%',
                               style: const TextStyle(
                                   fontSize: 11,

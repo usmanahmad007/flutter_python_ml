@@ -346,9 +346,11 @@ print("Metrics computed:", result)
                     Icon(Icons.code_rounded,
                         color: Colors.cyanAccent, size: 18),
                     SizedBox(width: 8),
-                    Text('Direct Python Script Execution',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 14)),
+                    Expanded(
+                      child: Text('Direct Python Script Execution',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 14)),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 10),

@@ -104,16 +104,20 @@ class _PythonConsoleViewState extends State<PythonConsoleView> {
                 const Icon(Icons.terminal_rounded,
                     size: 16, color: Colors.cyanAccent),
                 const SizedBox(width: 8),
-                Text(
-                  widget.title,
-                  style: const TextStyle(
-                    fontFamily: 'monospace',
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                Expanded(
+                  child: Text(
+                    widget.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontFamily: 'monospace',
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(width: 6),
                 IconButton(
                   icon: Icon(
                     _autoScroll ? Icons.vertical_align_bottom : Icons.pause,

@@ -177,11 +177,15 @@ class PythonMLModel extends ChangeNotifier {
 
     if (result is Map) {
       final map = Map<String, dynamic>.from(result);
-      if (map.containsKey('label')) predictedLabel = map['label']?.toString();
-      if (map.containsKey('predicted_label'))
+      if (map.containsKey('label')) {
+        predictedLabel = map['label']?.toString();
+      }
+      if (map.containsKey('predicted_label')) {
         predictedLabel = map['predicted_label']?.toString();
-      if (map.containsKey('confidence'))
+      }
+      if (map.containsKey('confidence')) {
         confidence = (map['confidence'] as num?)?.toDouble();
+      }
       if (map.containsKey('probabilities') && map['probabilities'] is List) {
         probabilities = (map['probabilities'] as List)
             .map((e) => (e as num).toDouble())
