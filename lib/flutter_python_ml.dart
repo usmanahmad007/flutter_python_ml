@@ -5,6 +5,7 @@ library flutter_python_ml;
 export 'src/core/python_bridge.dart';
 export 'src/core/python_ml_model.dart';
 export 'src/engine/base_engine.dart';
+export 'src/engine/dart_python_interpreter.dart';
 export 'src/engine/mock_engine.dart';
 export 'src/engine/platform_engine.dart';
 export 'src/engine/process_engine.dart';

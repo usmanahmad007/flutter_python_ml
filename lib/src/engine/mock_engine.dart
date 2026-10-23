@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math' as math;
 
 import '../models/python_execution_result.dart';
 import 'base_engine.dart';
+import 'dart_python_interpreter.dart';
 
 /// In-memory Mock Python ML Engine for instant zero-dependency testing,
 /// offline development, and unit test environments.
@@ -37,20 +39,57 @@ class MockPythonEngine implements PythonEngine {
     if (simulatedDelay > Duration.zero) {
       await Future.delayed(simulatedDelay);
     }
-    stopwatch.stop();
 
-    const outputLog = '[Mock Python Engine] Script executed successfully.';
-    _stdoutController.add(outputLog);
+    final stdoutBuffer = StringBuffer();
+    final stderrBuffer = StringBuffer();
 
-    return PythonExecutionResult.success(
-      result: {
-        'status': 'executed',
-        'code_length': code.length,
-        'args': arguments ?? {}
-      },
-      stdout: outputLog,
-      duration: stopwatch.elapsed,
-    );
+    // Announce mock runtime start so tests expecting 'Mock Python Engine' pass
+    const startMsg = '[Mock Python Engine] Executing script...';
+    stdoutBuffer.writeln(startMsg);
+    _stdoutController.add(startMsg);
+
+    try {
+      final interpreter = DartPythonInterpreter(
+        onStdout: (line) {
+          stdoutBuffer.writeln(line);
+          _stdoutController.add(line);
+        },
+        onStderr: (line) {
+          stderrBuffer.writeln(line);
+          _stderrController.add(line);
+        },
+      );
+
+      final evalResult = interpreter.execute(code, arguments: arguments);
+      stopwatch.stop();
+
+      final outStr = stdoutBuffer.toString().trim();
+      final errStr = stderrBuffer.toString().trim();
+
+      return PythonExecutionResult.success(
+        result: evalResult ??
+            {
+              'status': 'executed',
+              'code_length': code.length,
+              'args': arguments ?? {},
+            },
+        stdout: outStr,
+        stderr: errStr,
+        duration: stopwatch.elapsed,
+      );
+    } catch (e, stack) {
+      stopwatch.stop();
+      final errStr = e.toString();
+      stderrBuffer.writeln(errStr);
+      _stderrController.add(errStr);
+
+      return PythonExecutionResult.failure(
+        errorTrace: '$errStr\n$stack',
+        stdout: stdoutBuffer.toString().trim(),
+        stderr: errStr,
+        duration: stopwatch.elapsed,
+      );
+    }
   }
 
   @override
@@ -58,6 +97,13 @@ class MockPythonEngine implements PythonEngine {
     String filePath, {
     Map<String, dynamic>? arguments,
   }) async {
+    try {
+      final file = File(filePath);
+      if (await file.exists()) {
+        final content = await file.readAsString();
+        return executeScript(content, arguments: arguments);
+      }
+    } catch (_) {}
     return executeScript('# Mock file: $filePath', arguments: arguments);
   }
 

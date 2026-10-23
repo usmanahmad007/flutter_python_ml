@@ -98,6 +98,7 @@ void main() {
       final result = await bridge.executeScript('print("Hello from Python")');
       expect(result.isSuccess, true);
       expect(result.stdout, contains('Mock Python Engine'));
+      expect(result.stdout, contains('Hello from Python'));
     });
 
     test('callFunction runs Iris classification in Python mock', () async {
@@ -264,6 +265,64 @@ void main() {
       expect(find.text('1.23'), findsOneWidget);
       expect(find.text('4.56'), findsOneWidget);
       expect(find.text('7.89'), findsOneWidget);
+    });
+  });
+
+  group('DartPythonInterpreter Tests', () {
+    test(
+        'executes calculate_metrics function with prints and returns dictionary',
+        () {
+      final logs = <String>[];
+      final interpreter = DartPythonInterpreter(
+        onStdout: logs.add,
+      );
+
+      const script = '''
+def calculate_metrics(values):
+    import math
+    mean = sum(values) / len(values)
+    variance = sum((x - mean) ** 2 for x in values) / len(values)
+    return {
+        "count": len(values),
+        "mean": round(mean, 3),
+        "std_dev": round(math.sqrt(variance), 3),
+        "max": max(values),
+        "min": min(values),
+    }
+
+result = calculate_metrics([12.5, 45.2, 78.1, 99.4, 32.8])
+print("Metrics computed:", result)
+''';
+
+      interpreter.execute(script);
+      expect(logs.length, 1);
+      expect(logs.first, contains('Metrics computed:'));
+      expect(logs.first, contains("'count': 5"));
+      expect(logs.first, contains("'mean': 53.6"));
+      expect(logs.first, contains("'std_dev': 31.274"));
+    });
+
+    test('executes for loops, ranges, list comprehensions, and math functions',
+        () {
+      final logs = <String>[];
+      final interpreter = DartPythonInterpreter(
+        onStdout: logs.add,
+      );
+
+      interpreter.execute('''
+for i in range(1, 4):
+    print("Epoch", i)
+squares = [x * x for x in range(4)]
+print("Squares:", squares)
+import math
+print("Sqrt:", math.sqrt(100))
+''');
+
+      expect(logs, contains('Epoch 1'));
+      expect(logs, contains('Epoch 2'));
+      expect(logs, contains('Epoch 3'));
+      expect(logs, contains('Squares: [0, 1, 4, 9]'));
+      expect(logs, contains('Sqrt: 10.0'));
     });
   });
 }

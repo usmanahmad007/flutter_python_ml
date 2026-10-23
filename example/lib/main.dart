@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_python_ml/flutter_python_ml.dart';
 
@@ -89,11 +91,15 @@ print("Metrics computed:", result)
   }
 
   void _initEnginesAndModels() {
-    // Default to Mock Engine for instant offline zero-dependency demo
+    // Default to embedded Dart Engine for 100% on-device zero-dependency execution
     if (_isUsingMockEngine) {
       _bridge.setEngine(MockPythonEngine());
     } else {
-      _bridge.setEngine(LocalProcessEngine());
+      if (Platform.isAndroid || Platform.isIOS) {
+        _bridge.setEngine(PlatformChannelEngine());
+      } else {
+        _bridge.setEngine(LocalProcessEngine());
+      }
     }
 
     _irisModel = PythonMLModel(
@@ -180,7 +186,11 @@ print("Metrics computed:", result)
           Row(
             children: [
               Text(
-                _isUsingMockEngine ? 'Mock Engine' : 'Process IPC',
+                _isUsingMockEngine
+                    ? 'Dart Engine'
+                    : (Platform.isAndroid || Platform.isIOS
+                        ? 'Platform Driver'
+                        : 'Process IPC'),
                 style: const TextStyle(
                     fontSize: 11,
                     fontFamily: 'monospace',
